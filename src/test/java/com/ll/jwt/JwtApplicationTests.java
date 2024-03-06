@@ -85,5 +85,15 @@ class JwtApplicationTests {
         System.out.println("claims : " + claimsFromToken);
     }
 
+    @Test
+    @DisplayName("만료된 token")
+    void t7() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", 1L);
+        claims.put("name", "admin");
+
+        String accessToken = provider.genToken(claims, -1);
+        assertThat(provider.verify(accessToken)).isFalse();
+    }
 
 }
