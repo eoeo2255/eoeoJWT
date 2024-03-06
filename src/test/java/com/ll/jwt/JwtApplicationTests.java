@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -54,6 +57,18 @@ class JwtApplicationTests {
         SecretKey secretKey2 = provider.getSecretKey();
 
         assertThat(secretKey1 == secretKey2).isTrue();
+    }
+
+    @Test
+    @DisplayName("payload")
+    void t5() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", 1L);
+        claims.put("name", "admin");
+
+        String accessToken = provider.genToken(claims, 60*60*5);
+        System.out.println("accessToken : "+accessToken);
+        assertThat(accessToken).isNotNull();
     }
 
 }
