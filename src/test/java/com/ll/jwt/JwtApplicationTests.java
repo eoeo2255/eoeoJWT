@@ -1,8 +1,10 @@
 package com.ll.jwt;
 
+import com.ll.jwt.provider.JwtProvider;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,6 +18,9 @@ class JwtApplicationTests {
 
     @Value("${custom.jwt.secretKey}")
     private String secretKey;
+
+    @Autowired
+    private JwtProvider provider;
 
     @Test
     @DisplayName("secretKey 필수")
@@ -32,6 +37,23 @@ class JwtApplicationTests {
         SecretKey secretKey1 = Keys.hmacShaKeyFor(encodedKey.getBytes());
 
         assertThat(secretKey1).isNotNull();
+    }
+
+    @Test
+    @DisplayName("secretKey provider")
+    void t3() {
+        SecretKey secretKey = provider.getSecretKey();
+
+        assertThat(secretKey).isNotNull();
+    }
+
+    @Test
+    @DisplayName("secretKey는 한 번만 생성")
+    void t4() {
+        SecretKey secretKey1 = provider.getSecretKey();
+        SecretKey secretKey2 = provider.getSecretKey();
+
+        assertThat(secretKey1 == secretKey2).isTrue();
     }
 
 }
