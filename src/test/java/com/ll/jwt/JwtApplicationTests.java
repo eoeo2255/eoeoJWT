@@ -71,4 +71,19 @@ class JwtApplicationTests {
         assertThat(accessToken).isNotNull();
     }
 
+    @Test
+    @DisplayName("claims 값 얻기")
+    void t6() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", 1L);
+        claims.put("name", "admin");
+
+        String accessToken = provider.genToken(claims, 60*60*5);
+        assertThat(accessToken).isNotNull();
+
+        Map<String ,Object> claimsFromToken = provider.getClaims(accessToken);
+        System.out.println("claims : " + claimsFromToken);
+    }
+
+
 }
